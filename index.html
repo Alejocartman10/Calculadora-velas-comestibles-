@@ -3,89 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Recetas Gourmet</title>
+    <title>Calculadora de Costos - Velas Luz</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f8f5f2; display: flex; justify-content: center; padding: 15px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 450px; width: 100%; }
-        h2 { color: #5d4037; text-align: center; margin-bottom: 5px; }
-        p { text-align: center; color: #888; font-size: 0.9em; margin-bottom: 20px; }
-        label { font-weight: bold; color: #5d4037; display: block; margin-top: 10px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .ingrediente-row { display: flex; gap: 10px; margin-top: 10px; }
-        .ing-nombre { flex: 2; }
-        .ing-porcentaje { flex: 1; }
-        button { width: 100%; background-color: #a1887f; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 15px; cursor: pointer; font-weight: bold; }
-        .btn-calcular { background-color: #5d4037; margin-top: 25px; font-size: 1.1em; }
-        .resultado { margin-top: 20px; padding: 15px; background-color: #f1ede9; border-left: 5px solid #5d4037; border-radius: 5px; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e0f2f1 0%, #e1f5fe 100%); color: #37474f; display: flex; justify-content: center; padding: 15px; margin: 0; min-height: 100vh; }
+        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); max-width: 480px; width: 100%; }
+        h2 { text-align: center; color: #00897b; margin-bottom: 5px; font-weight: 800; }
+        .subtitle { text-align: center; font-size: 0.9em; margin-bottom: 25px; color: #546e7a; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { background: #e0f2f1; padding: 10px 15px; border-radius: 10px; font-weight: bold; margin-top: 25px; color: #00796b; font-size: 0.95em; text-transform: uppercase; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        label { display: block; margin-top: 15px; font-size: 0.88em; font-weight: 700; color: #455a64; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #b2dfdb; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; transition: border-color 0.3s; }
+        input:focus, select:focus { border-color: #26a69a; outline: none; }
+        .ingrediente-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; margin-top: 10px; align-items: end; border-bottom: 1px dashed #b2dfdb; padding-bottom: 10px; }
+        .ingrediente-grid input { padding: 8px; font-size: 14px; border-width: 1px; }
+        .btn-add { background: #ffa726; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; font-weight: bold; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 6px rgba(255,167,38,0.3); transition: background 0.3s; }
+        .btn-add:hover { background: #fb8c00; }
+        .btn-calc { background: #00acc1; color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; margin-top: 35px; cursor: pointer; font-size: 1.2em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0,172,193,0.4); transition: background 0.3s, transform 0.1s; }
+        .btn-calc:hover { background: #0097a7; }
+        .btn-calc:active { transform: translateY(2px); }
+        .res-box { margin-top: 35px; padding: 25px; border-radius: 20px; background: linear-gradient(135deg, #00bcd4 0%, #00acc1 100%); color: white; box-shadow: 0 10px 25px rgba(0,188,212,0.3); }
+        .res-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; font-size: 1em; }
+        .res-row.total { border: none; font-size: 1.5em; font-weight: bold; color: #e0f7fa; margin-top: 15px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; }
+        .ganancia-neta { text-align: center; font-size: 0.9em; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); color: #b2ebf2; font-weight: bold; }
+        .hint { font-size: 0.75em; color: #78909c; margin-top: 2px; display: block; font-weight: normal; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>Creador de Velas</h2>
-    <p>Define tus ingredientes y el peso total</p>
-    
-    <label>Peso Total del Envase (g):</label>
-    <input type="number" id="pesoTotal" placeholder="Ej: 500">
+<div class="container">
+    <h2>Calculadora de Costos</h2>
+    <p class="subtitle">Velas Luz - Gourmet</p>
 
-    <div id="contenedor-ingredientes">
-        <label>Ingredientes adicionales (%):</label>
-        <div class="ingrediente-row">
-            <input type="text" class="ing-nombre" placeholder="Nombre (ej: Ajo)">
-            <input type="number" class="ing-porcentaje" placeholder="%">
+    <div class="section-title">1. Recipiente y Empaque</div>
+    <label>Costo del Envase ($)</label>
+    <input type="number" id="costoEnvase" placeholder="Ej: 1500">
+    <label>Etiqueta, mecha y empaque ($)</label>
+    <input type="number" id="costoEmpaque" placeholder="Ej: 800">
+
+    <div class="section-title">2. Ingredientes (Cálculo x gramo)</div>
+    <div id="lista-ingredientes">
+        <div class="ingrediente-grid">
+            <div><span class="hint">¿Qué es?</span><input type="text" class="n" placeholder="Mantequilla"></div>
+            <div><span class="hint">Precio $</span><input type="number" class="p" placeholder="12000"></div>
+            <div><span class="hint">Peso Tot (g)</span><input type="number" class="wt" placeholder="500"></div>
+            <div><span class="hint">Uso (g)</span><input type="number" class="u" placeholder="80"></div>
         </div>
     </div>
+    <button class="btn-add" onclick="addIng()">+ Añadir Ingrediente</button>
 
-    <button onclick="agregarFila()">+ Añadir otro ingrediente</button>
-    <button class="btn-calcular" onclick="calcularReceta()">Calcular Receta Final</button>
+    <div class="section-title">3. Otros y Margen</div>
+    <label>Costos Indirectos ($) <span style="font-weight:normal; color:#78909c;">(Gas, transporte...)</span></label>
+    <input type="number" id="indirectos" placeholder="Ej: 2000">
+    
+    <label>Margen de Ganancia deseado (%)</label>
+    <select id="margen">
+        <option value="1.5">50% de ganancia</option>
+        <option value="1.6">60% de ganancia</option>
+        <option value="2">100% (Duplicar costo)</option>
+        <option value="2.5">150% (Premium)</option>
+    </select>
 
-    <div id="resultado" class="resultado" style="display:none;"></div>
+    <button class="btn-calc" onclick="calcular()">CALCULAR PRECIO FINAL</button>
+
+    <div id="resultado" class="res-box" style="display:none;">
+        <div class="res-row"><span>Costo Materiales:</span> <span id="rMat"></span></div>
+        <div class="res-row"><span>Costos Indirectos:</span> <span id="rInd"></span></div>
+        <div class="res-row" style="color:#b2ebf2; font-weight: bold;"><span>COSTO TOTAL:</span> <span id="rTotal"></span></div>
+        <div class="res-row total"><span>PRECIO SUGERIDO:</span> <span id="rSugerido"></span></div>
+        <div class="ganancia-neta">Ganancia neta por vela: <span id="rGanancia"></span></div>
+    </div>
 </div>
 
 <script>
-    function agregarFila() {
+    function addIng() {
         const div = document.createElement('div');
-        div.className = 'ingrediente-row';
+        div.className = 'ingrediente-grid';
         div.innerHTML = `
-            <input type="text" class="ing-nombre" placeholder="Nombre">
-            <input type="number" class="ing-porcentaje" placeholder="%">
+            <div><input type="text" class="n" placeholder="Nombre"></div>
+            <div><input type="number" class="p" placeholder="$"></div>
+            <div><input type="number" class="wt" placeholder="Total g"></div>
+            <div><input type="number" class="u" placeholder="Uso g"></div>
         `;
-        document.getElementById('contenedor-ingredientes').appendChild(div);
+        document.getElementById('lista-ingredientes').appendChild(div);
     }
 
-    function calcularReceta() {
-        const total = parseFloat(document.getElementById('pesoTotal').value);
-        const nombres = document.getElementsByClassName('ing-nombre');
-        const porcentajes = document.getElementsByClassName('ing-porcentaje');
-        
-        if (!total) return alert("Pon el peso total");
+    function calcular() {
+        let costoEnvase = parseFloat(document.getElementById('costoEnvase').value) || 0;
+        let costoEmpaque = parseFloat(document.getElementById('costoEmpaque').value) || 0;
+        let indirectos = parseFloat(document.getElementById('indirectos').value) || 0;
+        let multiplicador = parseFloat(document.getElementById('margen').value);
 
-        let sumaExtras = 0;
-        let detalleHtml = `<strong>Tu Receta Final:</strong><br><br>`;
+        let totalIngredientes = 0;
+        const precios = document.getElementsByClassName('p');
+        const pesosTotales = document.getElementsByClassName('wt');
+        const usos = document.getElementsByClassName('u');
 
-        for (let i = 0; i < nombres.length; i++) {
-            let nombre = nombres[i].value || `Ingrediente ${i+1}`;
-            let porc = parseFloat(porcentajes[i].value) || 0;
-            let gramos = total * (porc / 100);
-            sumaExtras += gramos;
-            detalleHtml += `• ${nombre}: ${gramos.toFixed(2)} g (${porc}%)<br>`;
+        for (let i = 0; i < precios.length; i++) {
+            let p = parseFloat(precios[i].value) || 0;
+            let wt = parseFloat(pesosTotales[i].value) || 1; // evitar division por 0
+            let u = parseFloat(usos[i].value) || 0;
+            totalIngredientes += (p / wt) * u;
         }
 
-        let ceraBase = total - sumaExtras;
-        
-        if (ceraBase < 0) {
-            alert("¡Error! Los porcentajes suman más del 100%");
-            return;
-        }
+        let costoMateriales = costoEnvase + costoEmpaque + totalIngredientes;
+        let costoFinal = costoMateriales + indirectos;
+        let precioVenta = costoFinal * multiplicador;
+        let ganancia = precioVenta - costoFinal;
 
-        detalleHtml = `• Cera Base: ${ceraBase.toFixed(2)} g<br>` + detalleHtml;
+        document.getElementById('rMat').innerText = "$" + costoMateriales.toLocaleString('es-CO');
+        document.getElementById('rInd').innerText = "$" + indirectos.toLocaleString('es-CO');
+        document.getElementById('rTotal').innerText = "$" + costoFinal.toLocaleString('es-CO');
+        document.getElementById('rSugerido').innerText = "$" + Math.round(precioVenta).toLocaleString('es-CO');
+        document.getElementById('rGanancia').innerText = "$" + Math.round(ganancia).toLocaleString('es-CO');
         
-        const resDiv = document.getElementById('resultado');
-        resDiv.innerHTML = detalleHtml;
-        resDiv.style.display = 'block';
+        document.getElementById('resultado').style.display = 'block';
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 100);
     }
 </script>
 
 </body>
 </html>
-
