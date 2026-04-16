@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Diego</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .menu-container { width: 90%; max-width: 400px; text-align: center; }
+        h1 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; color: #aaa; text-transform: uppercase; }
+        .card { 
+            background: #1e1e1e; padding: 30px; border-radius: 20px; margin-bottom: 20px; 
+            display: block; text-decoration: none; color: white; border: 1px solid #333;
+            transition: transform 0.2s; border-bottom: 5px solid #444; 
+        }
+        .card:active { transform: scale(0.95); background: #252525; }
+        .velas { border-bottom-color: #00acc1; }
+        .cafe { border-bottom-color: #d4a373; }
+        .title { font-size: 1.2em; font-weight: bold; display: block; margin-top: 10px; }
+        .desc { font-size: 0.8em; color: #777; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+<div class="menu-container">
+    <h1>Panel de Control</h1>
+    
+    <a href="Velas.html" class="card velas">
+        <span style="font-size:35px">🕯️</span>
+        <span class="title">VELAS COMESTIBLES</span>
+        <span class="desc">Costos y Rentabilidad</span>
+    </a>
+
+    <a href="cafe.html" class="card cafe">
+        <span style="font-size:35px">☕</span>
+        <span class="title">BARISTA PRO</span>
+        <span class="desc">Ratios y Cronómetro</span>
+    </a>
+</div>
+</body>
+</html>
