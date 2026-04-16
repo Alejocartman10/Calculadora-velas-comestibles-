@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barista Pro - Estación de Café</title>
+    <style>
+        body { font-family: 'Helvetica Neue', sans-serif; background-color: #1a1a1a; color: #e0e0e0; display: flex; justify-content: center; padding: 15px; margin: 0; min-height: 100vh; align-items: center; }
+        .card { background: #2d2d2d; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); max-width: 420px; width: 100%; border: 1px solid #444; }
+        h1 { color: #d4a373; text-align: center; font-size: 1.4em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .molienda-tip { text-align: center; font-style: italic; color: #999; font-size: 0.85em; margin-bottom: 20px; min-height: 1.2em; }
+        label { display: block; margin-top: 15px; color: #a0a0a0; font-size: 0.9em; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #444; border-radius: 12px; background: #3d3d3d; color: white; font-size: 16px; box-sizing: border-box; }
+        input:focus, select:focus { border-color: #d4a373; outline: none; }
+        .calc-box { background: #383838; padding: 15px; border-radius: 15px; margin-top: 25px; text-align: center; border-left: 4px solid #d4a373; }
+        .water-amount { font-size: 2.5em; font-weight: bold; color: #d4a373; display: block; }
+        .timer-display { font-size: 3em; font-family: monospace; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(212,163,115,0.3); }
+        .btn-timer { width: 48%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px; }
+        .start { background: #d4a373; color: #1a1a1a; transition: background 0.3s; }
+        .start:hover { background: #e6ccb2; }
+        .reset { background: #444; color: white; }
+        .controls { display: flex; justify-content: space-between; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Barista Pro</h1>
+    <div id="moliendaText" class="molienda-tip">Molienda sugerida: Cargando...</div>
+    
+    <label>1. Elige tu Cafetera:</label>
+    <select id="metodo" onchange="cambiarRatio()">
+        <option value="v60" data-ratio="17" data-molienda="Media-Fina (como sal fina)">Hario V60</option>
+        <option value="chemex" data-ratio="16" data-molienda="Media-Gruesa (como sal gruesa)">Chemex</option>
+        <option value="prensa" data-ratio="15" data-molienda="Gruesa (como pimienta)">Prensa Francesa</option>
+        <option value="aeropress" data-ratio="15" data-molienda="Fina (como sal de mesa)">AeroPress Go</option>
+        <option value="evasolo" data-ratio="15" data-molienda="Media-Gruesa (un poco más fina que Prensa)">Eva Solo</option>
+    </select>
+
+    <label>2. Café en gramos (g):</label>
+    <input type="number" id="cafe" value="20" oninput="calcular()">
+
+    <label>3. Ajuste de Ratio (1:X):</label>
+    <input type="number" id="ratio" value="15" oninput="calcular()">
+
+    <div class="calc-box">
+        <span style="font-size: 0.9em; color: #a0a0a0;">Agua total requerida:</span>
+        <span class="water-amount" id="resultadoAgua">300g</span>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <span style="color: #a0a0a0;">Cronómetro de Extracción</span>
+        <div class="timer-display" id="timer">00:00</div>
+        <div class="controls">
+            <button class="btn-timer start" id="startBtn" onclick="toggleTimer()">INICIAR</button>
+            <button class="btn-timer reset" onclick="resetTimer()">RESETEAR</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function cambiarRatio() {
+        const metodo = document.getElementById('metodo');
+        const option = metodo.options[metodo.selectedIndex];
+        
+        const ratioSugerido = option.getAttribute('data-ratio');
+        const molienda = option.getAttribute('data-molienda');
+        
+        document.getElementById('ratio').value = ratioSugerido;
+        document.getElementById('moliendaText').innerText = "Molienda: " + molienda;
+        calcular();
+    }
+
+    function calcular() {
+        const cafe = document.getElementById('cafe').value || 0;
+        const ratio = document.getElementById('ratio').value || 0;
+        const agua = Math.round(cafe * ratio);
+        document.getElementById('resultadoAgua').innerText = agua + "g";
+    }
+
+    let timerInterval;
+    let seconds = 0;
+    let running = false;
+
+    function toggleTimer() {
+        const btn = document.getElementById('startBtn');
+        if (!running) {
+            running = true;
+            btn.innerText = "PAUSAR";
+            btn.style.background = "#e63946";
+            timerInterval = setInterval(() => {
+                seconds++;
+                let m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                let s = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').innerText = `${m}:${s}`;
+            }, 1000);
+        } else {
+            running = false;
+            btn.innerText = "CONTINUAR";
+            btn.style.background = "#d4a373";
+            clearInterval(timerInterval);
+        }
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        running = false;
+        seconds = 0;
+        document.getElementById('timer').innerText = "00:00";
+        const btn = document.getElementById('startBtn');
+        btn.innerText = "INICIAR";
+        btn.style.background = "#d4a373";
+    }
+
+    // Inicializar al cargar
+    window.onload = cambiarRatio;
+</script>
+
+</body>
+</html>
