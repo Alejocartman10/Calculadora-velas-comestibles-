@@ -3,53 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Velas Artesanales</title>
+    <title>Calculadora de Velas Comestibles</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f1ea; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
-        h2 { color: #5d4037; text-align: center; }
-        label { display: block; margin-top: 15px; color: #333; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; background-color: #8d6e63; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f1ea; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 450px; width: 100%; }
+        h2 { color: #5d4037; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; color: #555; font-weight: bold; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; background-color: #8d6e63; color: white; border: none; padding: 15px; border-radius: 8px; margin-top: 25px; cursor: pointer; font-size: 18px; font-weight: bold; }
         button:hover { background-color: #6d4c41; }
-        .resultado { margin-top: 20px; padding: 15px; background-color: #efebe9; border-radius: 8px; color: #3e2723; }
+        .resultado { margin-top: 25px; padding: 20px; background-color: #efebe9; border-radius: 10px; color: #3e2723; line-height: 1.6; }
+        .descripcion { font-style: italic; color: #6d4c41; margin-top: 10px; border-top: 1px dashed #d7ccc8; pt: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Calculadora de Insumos</h2>
+    <h2>Calculadora de Receta Completa</h2>
     
-    <label>Capacidad del envase (gramos totales):</label>
-    <input type="number" id="capacidad" placeholder="Ej: 200">
+    <label>Tamaño total del lote (gramos):</label>
+    <input type="number" id="totalGramos" placeholder="Ej: 500">
 
-    <label>% de Fragancia deseado (ej: 10):</label>
-    <input type="number" id="porcentaje" placeholder="Ej: 10">
-
-    <button onclick="calcular()">Calcular Receta</button>
+    <button onclick="calcular()">Generar Receta Completa</button>
 
     <div id="resultado" class="resultado" style="display:none;">
-        <strong>Tu receta:</strong><br>
-        <span id="cera"></span> g de Cera<br>
-        <span id="fragancia"></span> g de Fragancia
+        <strong>Ingredientes necesarios:</strong><br>
+        • <span id="cera"></span> g de Cera base<br>
+        • <span id="mantequilla"></span> g de Mantequilla (10%)<br>
+        • <span id="coco"></span> g de Aceite de coco (1%)<br>
+        • <span id="fragancia"></span> g de Fragancia (2%)<br>
+        
+        <div class="descripcion">
+            <strong>Nota de preparación:</strong><br>
+            Derrita la cera con la mantequilla a fuego lento. Añada el aceite de coco al final antes de la fragancia.
+        </div>
     </div>
 </div>
 
 <script>
     function calcular() {
-        const capacidad = parseFloat(document.getElementById('capacidad').value);
-        const porcentaje = parseFloat(document.getElementById('porcentaje').value);
+        const total = parseFloat(document.getElementById('totalGramos').value);
 
-        if (capacidad > 0 && porcentaje > 0) {
-            // Fórmula: Fragancia = Capacidad * (Porcentaje / 100)
-            const gFragancia = capacidad * (porcentaje / 100);
-            const gCera = capacidad - gFragancia;
+        if (total > 0) {
+            // Calculamos proporciones basadas en tus ejemplos
+            const gMantequilla = total * 0.10; // 10%
+            const gCoco = total * 0.01;        // 1%
+            const gFragancia = total * 0.02;   // 2%
+            const gCera = total - (gMantequilla + gCoco + gFragancia);
 
+            // Mostramos los resultados
             document.getElementById('cera').innerText = gCera.toFixed(2);
+            document.getElementById('mantequilla').innerText = gMantequilla.toFixed(2);
+            document.getElementById('coco').innerText = gCoco.toFixed(2);
             document.getElementById('fragancia').innerText = gFragancia.toFixed(2);
+            
             document.getElementById('resultado').style.display = 'block';
         } else {
-            alert("Por favor, ingresa valores válidos.");
+            alert("Por favor, ingresa el peso total en gramos.");
         }
     }
 </script>
