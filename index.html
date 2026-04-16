@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Costos - Velas Luz</title>
+    <title>Calculadora de Costos - Velas Comestibles</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e0f2f1 0%, #e1f5fe 100%); color: #37474f; display: flex; justify-content: center; padding: 15px; margin: 0; min-height: 100vh; }
         .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); max-width: 480px; width: 100%; }
@@ -31,7 +31,7 @@
 
 <div class="container">
     <h2>Calculadora de Costos</h2>
-    <p class="subtitle">Velas Luz - Gourmet</p>
+    <p class="subtitle">Velas Comestibles</p>
 
     <div class="section-title">1. Recipiente y Empaque</div>
     <label>Costo del Envase ($)</label>
@@ -96,15 +96,31 @@
         const precios = document.getElementsByClassName('p');
         const pesosTotales = document.getElementsByClassName('wt');
         const usos = document.getElementsByClassName('u');
+        const nombres = document.getElementsByClassName('n');
 
         for (let i = 0; i < precios.length; i++) {
             let p = parseFloat(precios[i].value) || 0;
-            let wt = parseFloat(pesosTotales[i].value) || 1; // evitar division por 0
+            let wt = parseFloat(pesosTotales[i].value) || 0;
             let u = parseFloat(usos[i].value) || 0;
-            totalIngredientes += (p / wt) * u;
+            let nombre = nombres[i].value || "un ingrediente";
+
+            if (u > 0 && wt <= 0) {
+                alert("¡Atención! Por favor ingresa el 'Peso Total' del paquete para: " + nombre);
+                return;
+            }
+
+            if (wt > 0) {
+                totalIngredientes += (p / wt) * u;
+            }
         }
 
         let costoMateriales = costoEnvase + costoEmpaque + totalIngredientes;
+        
+        if (costoMateriales === 0 && indirectos === 0) {
+            alert("Por favor, ingresa al menos un costo para calcular.");
+            return;
+        }
+
         let costoFinal = costoMateriales + indirectos;
         let precioVenta = costoFinal * multiplicador;
         let ganancia = precioVenta - costoFinal;
@@ -124,3 +140,4 @@
 
 </body>
 </html>
+
