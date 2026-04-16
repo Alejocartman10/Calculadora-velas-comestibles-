@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Velas Artesanales</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f1ea; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
+        h2 { color: #5d4037; text-align: center; }
+        label { display: block; margin-top: 15px; color: #333; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; background-color: #8d6e63; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #6d4c41; }
+        .resultado { margin-top: 20px; padding: 15px; background-color: #efebe9; border-radius: 8px; color: #3e2723; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Calculadora de Insumos</h2>
+    
+    <label>Capacidad del envase (gramos totales):</label>
+    <input type="number" id="capacidad" placeholder="Ej: 200">
+
+    <label>% de Fragancia deseado (ej: 10):</label>
+    <input type="number" id="porcentaje" placeholder="Ej: 10">
+
+    <button onclick="calcular()">Calcular Receta</button>
+
+    <div id="resultado" class="resultado" style="display:none;">
+        <strong>Tu receta:</strong><br>
+        <span id="cera"></span> g de Cera<br>
+        <span id="fragancia"></span> g de Fragancia
+    </div>
+</div>
+
+<script>
+    function calcular() {
+        const capacidad = parseFloat(document.getElementById('capacidad').value);
+        const porcentaje = parseFloat(document.getElementById('porcentaje').value);
+
+        if (capacidad > 0 && porcentaje > 0) {
+            // Fórmula: Fragancia = Capacidad * (Porcentaje / 100)
+            const gFragancia = capacidad * (porcentaje / 100);
+            const gCera = capacidad - gFragancia;
+
+            document.getElementById('cera').innerText = gCera.toFixed(2);
+            document.getElementById('fragancia').innerText = gFragancia.toFixed(2);
+            document.getElementById('resultado').style.display = 'block';
+        } else {
+            alert("Por favor, ingresa valores válidos.");
+        }
+    }
+</script>
+
+</body>
+</html>
