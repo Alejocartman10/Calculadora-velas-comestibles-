@@ -3,43 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Costos Pro | 800</title>
+    <title>Calculadora de Costos | Velas Comestibles</title>
     <style>
         :root { --primary: #f39c12; --secondary: #16a085; --danger: #e74c3c; --bg: #f4f7f6; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: #333; }
         .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: var(--secondary); margin-bottom: 20px; }
-        .section-title { background: #e8f6f3; padding: 10px; border-radius: 8px; font-weight: bold; color: var(--secondary); margin: 15px 0 10px; border-left: 5px solid var(--secondary); font-size: 0.9em; }
+        
+        .header-section { text-align: center; margin-bottom: 20px; }
+        .header-section h2 { color: var(--secondary); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .header-section p { color: #7f8c8d; margin: 5px 0 0; font-weight: bold; font-size: 0.9em; }
+
+        .section-title { background: #e8f6f3; padding: 10px; border-radius: 8px; font-weight: bold; color: var(--secondary); margin: 15px 0 10px; border-left: 5px solid var(--secondary); font-size: 0.9em; text-transform: uppercase; }
         
         .row { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 35px; gap: 5px; margin-bottom: 8px; align-items: center; }
         .header-row { font-size: 0.7em; font-weight: bold; color: #7f8c8d; text-align: center; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
         
-        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; }
-        .btn-calc { background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 1.1em; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 0.9em; }
+        .input-group { margin-bottom: 10px; }
+        .input-group label { display: block; font-size: 0.8em; color: #7f8c8d; margin-bottom: 5px; margin-left: 5px; }
+
+        .btn-add { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; transition: 0.3s; }
+        .btn-calc { background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 1.1em; box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3); }
         .btn-remove { background: var(--danger); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; font-weight: bold; }
         
-        .result { margin-top: 20px; padding: 15px; background: #2c3e50; color: white; border-radius: 10px; text-align: center; display: none; }
-        .result h3 { margin: 5px 0 0; color: var(--primary); font-size: 1.6em; }
+        .result { margin-top: 25px; padding: 20px; background: #2c3e50; color: white; border-radius: 12px; text-align: center; display: none; }
+        .result h3 { margin: 5px 0 0; color: var(--primary); font-size: 1.8em; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Costos de Receta</h2>
+    <div class="header-section">
+        <h2>Calculadora de Costos</h2>
+        <p>VELAS COMESTIBLES</p>
+    </div>
 
-    <div class="section-title">1. INGREDIENTES</div>
+    <div class="section-title">1. RECIPIENTE Y EMPAQUE</div>
+    <div class="input-group">
+        <label>Costo del Envase ($)</label>
+        <input type="number" id="container-cost" placeholder="Ej: 1500">
+    </div>
+    <div class="input-group">
+        <label>Etiqueta, mecha y empaque ($)</label>
+        <input type="number" id="packaging-cost" placeholder="Ej: 800">
+    </div>
+
+    <div class="section-title">2. INGREDIENTES (CÁLCULO X GRAMO)</div>
     <div class="row header-row">
-        <span>Nombre</span>
+        <span>¿Qué es?</span>
         <span>Precio $</span>
-        <span>Peso Pack</span>
+        <span>Peso Tot</span>
         <span>Uso</span>
         <span></span>
     </div>
     
     <div id="ingredients-cont">
         <div class="row ingredient-row">
-            <input type="text" placeholder="Ej: Perejil" class="name">
+            <input type="text" placeholder="Mantequilla" class="name">
             <input type="number" class="price">
             <input type="number" class="total-weight">
             <input type="number" class="use">
@@ -49,16 +69,22 @@
 
     <button class="btn-add" onclick="addRow()">+ AÑADIR INGREDIENTE</button>
 
-    <div class="section-title">2. MARGEN Y OTROS</div>
-    <input type="number" id="indirects" placeholder="Gastos extras (Gas, Envío...)" style="margin-bottom: 10px;">
+    <div class="section-title">3. OTROS Y MARGEN</div>
+    <div class="input-group">
+        <input type="number" id="indirects" placeholder="Costos Indirectos (Gas, transporte...)">
+    </div>
     
-    <select id="margin">
-        <option value="0.3">Ganancia del 30%</option>
-        <option value="0.5" selected>Ganancia del 50%</option>
-        <option value="1">Ganancia del 100% (Duplicar)</option>
-    </select>
+    <div class="input-group">
+        <label>Margen de Ganancia deseado (%)</label>
+        <select id="margin">
+            <option value="0.3">30% de ganancia</option>
+            <option value="0.5" selected>50% de ganancia</option>
+            <option value="1">100% de ganancia (Duplicar)</option>
+            <option value="2">200% de ganancia (Triplicar)</option>
+        </select>
+    </div>
 
-    <button class="btn-calc" onclick="calculate()">CALCULAR AHORA</button>
+    <button class="btn-calc" onclick="calculate()">CALCULAR PRECIO FINAL</button>
 
     <div id="result-box" class="result">
         <p id="total-cost-text" style="font-size: 0.9em; margin: 0; opacity: 0.8;"></p>
@@ -88,7 +114,7 @@
     }
 
     function calculate() {
-        let totalCost = 0;
+        let ingredientsTotal = 0;
         const rows = document.querySelectorAll('.ingredient-row');
 
         rows.forEach(row => {
@@ -97,19 +123,20 @@
             const totalWeight = parseFloat(row.querySelector('.total-weight').value) || 0;
             const use = parseFloat(row.querySelector('.use').value) || 0;
 
-            // SOLO CALCULA SI TIENE DATOS REALES (IGNORA FILAS VACÍAS O CON CEROS)
             if (name !== "" && price > 0 && totalWeight > 0 && use > 0) {
-                totalCost += (price / totalWeight) * use;
+                ingredientsTotal += (price / totalWeight) * use;
             }
         });
 
+        const containerCost = parseFloat(document.getElementById('container-cost').value) || 0;
+        const packagingCost = parseFloat(document.getElementById('packaging-cost').value) || 0;
         const indirects = parseFloat(document.getElementById('indirects').value) || 0;
         const margin = parseFloat(document.getElementById('margin').value);
         
-        const netCost = totalCost + indirects;
+        const netCost = ingredientsTotal + containerCost + packagingCost + indirects;
 
         if (netCost === 0) {
-            alert("Por favor, llena al menos un ingrediente con todos sus datos.");
+            alert("Por favor, llena al menos un dato para calcular.");
             return;
         }
 
@@ -123,5 +150,3 @@
 
 </body>
 </html>
-
-
