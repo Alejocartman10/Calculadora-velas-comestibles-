@@ -15,29 +15,27 @@
 
         .section-title { background: #e8f6f3; padding: 10px; border-radius: 8px; font-weight: bold; color: var(--secondary); margin: 15px 0 10px; border-left: 5px solid var(--secondary); font-size: 0.8em; text-transform: uppercase; }
         
-        /* Layout para escritorio/tablets */
-        .row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 35px; gap: 6px; margin-bottom: 10px; align-items: center; }
+        /* Columnas optimizadas para incluir "Precio" */
+        .row { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr 30px; gap: 6px; margin-bottom: 10px; align-items: center; }
         .header-row { font-size: 0.6em; font-weight: bold; color: #7f8c8d; text-align: center; text-transform: uppercase; }
         
-        input, select { width: 100%; padding: 12px 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; /* 16px evita el zoom automático en iPhone */ }
+        input, select { width: 100%; padding: 10px 6px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         .input-group { margin-bottom: 10px; }
         .input-group label { display: block; font-size: 0.8em; color: #7f8c8d; margin-bottom: 5px; margin-left: 5px; }
 
         .btn-add { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; font-size: 0.9em; }
-        .btn-calc { background: var(--secondary); color: white; border: none; padding: 16px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 1.1em; }
+        .btn-calc { background: var(--secondary); color: white; border: none; padding: 16px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 1.1em; box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3); }
         
-        .btn-remove { background: var(--danger); color: white; border: none; border-radius: 5px; width: 30px; height: 35px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .btn-remove { background: var(--danger); color: white; border: none; border-radius: 5px; width: 26px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; }
         
         .result { margin-top: 20px; padding: 20px; background: #2c3e50; color: white; border-radius: 12px; text-align: center; display: none; }
         .result h3 { margin: 5px 0 0; color: var(--primary); font-size: 1.8em; }
 
-        /* AJUSTES PARA TELÉFONO (PANTALLAS PEQUEÑAS) */
         @media (max-width: 480px) {
-            .row { grid-template-columns: 1.5fr 1fr 1fr 1fr 30px; gap: 4px; }
-            .header-row { font-size: 0.55em; }
+            .row { grid-template-columns: 1.4fr 1fr 1fr 1.1fr 28px; gap: 4px; }
+            .header-row { font-size: 0.52em; }
             input { padding: 8px 4px; font-size: 14px; }
-            .container { padding: 10px; }
-            .section-title { font-size: 0.75em; }
+            .container { padding: 12px; }
         }
     </style>
 </head>
@@ -62,18 +60,18 @@
     <div class="section-title">2. INGREDIENTES (CÁLCULO X GRAMO)</div>
     <div class="row header-row">
         <span>¿Qué es?</span>
-        <span>$</span>
-        <span>Peso(g)</span>
+        <span>Precio $</span>
+        <span>Peso Tot(g)</span>
         <span>Uso(g)</span>
         <span></span>
     </div>
     
     <div id="ingredients-cont">
         <div class="row ingredient-row">
-            <input type="text" placeholder="Cera" class="name">
-            <input type="number" placeholder="0" class="price">
-            <input type="number" placeholder="0" class="total-weight">
-            <input type="number" placeholder="0" class="use">
+            <input type="text" placeholder="Cera/Mantequilla" class="name">
+            <input type="number" placeholder="12000" class="price">
+            <input type="number" placeholder="500" class="total-weight">
+            <input type="number" placeholder="80" class="use">
             <button class="btn-remove" onclick="removeRow(this)">×</button>
         </div>
     </div>
@@ -117,7 +115,7 @@
         const newRow = document.createElement('div');
         newRow.className = 'row ingredient-row';
         newRow.innerHTML = `
-            <input type="text" placeholder="Nombre" class="name">
+            <input type="text" placeholder="Ingrediente" class="name">
             <input type="number" placeholder="0" class="price">
             <input type="number" placeholder="0" class="total-weight">
             <input type="number" placeholder="0" class="use">
@@ -141,7 +139,8 @@
             const totalWeight = parseFloat(row.querySelector('.total-weight').value) || 0;
             const use = parseFloat(row.querySelector('.use').value) || 0;
 
-            if (name !== "" && price > 0 && totalWeight > 0 && use > 0) {
+            // Lógica corregida: solo calcula si hay datos válidos y evita división por cero
+            if (price > 0 && totalWeight > 0 && use > 0) {
                 ingredientsTotal += (price / totalWeight) * use;
             }
         });
@@ -151,10 +150,11 @@
         const indirects = parseFloat(document.getElementById('indirects').value) || 0;
         const margin = parseFloat(document.getElementById('margin').value);
         
+        // SUMA TOTAL: Empaque + Ingredientes + Indirectos
         const netCost = ingredientsTotal + containerCost + packagingCost + indirects;
 
         if (netCost === 0) {
-            alert("Por favor, llena al menos un dato.");
+            alert("Por favor, ingresa los valores para calcular.");
             return;
         }
 
@@ -164,7 +164,6 @@
         document.getElementById('final-price').innerText = `$${Math.round(finalPrice).toLocaleString()}`;
         document.getElementById('result-box').style.display = 'block';
         
-        // Scroll automático al resultado en móvil
         document.getElementById('result-box').scrollIntoView({ behavior: 'smooth' });
     }
 </script>
