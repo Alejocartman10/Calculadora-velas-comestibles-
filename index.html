@@ -135,11 +135,13 @@
             }
         });
 
+        // RE-INTEGRACIÓN DE TODOS LOS COSTOS AL CÁLCULO
         const containerCost = parseFloat(document.getElementById('container-cost').value) || 0;
         const packagingCost = parseFloat(document.getElementById('packaging-cost').value) || 0;
         const indirects = parseFloat(document.getElementById('indirects').value) || 0;
         const margin = parseFloat(document.getElementById('margin').value);
         
+        // El Costo Neto debe ser la suma de TODO
         const netCost = ingredientsTotal + containerCost + packagingCost + indirects;
 
         if (netCost === 0) {
@@ -149,6 +151,7 @@
 
         const finalPrice = netCost * (1 + margin);
 
+        // Mostrar resultados formateados
         document.getElementById('total-cost-text').innerText = `Costo Neto: $${Math.round(netCost).toLocaleString()}`;
         document.getElementById('final-price').innerText = `$${Math.round(finalPrice).toLocaleString()}`;
         document.getElementById('result-box').style.display = 'block';
