@@ -13,18 +13,19 @@
         .header-section h2 { color: var(--secondary); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
         .header-section p { color: #7f8c8d; margin: 5px 0 0; font-weight: bold; font-size: 0.9em; }
 
-        .section-title { background: #e8f6f3; padding: 10px; border-radius: 8px; font-weight: bold; color: var(--secondary); margin: 15px 0 10px; border-left: 5px solid var(--secondary); font-size: 0.9em; text-transform: uppercase; }
+        .section-title { background: #e8f6f3; padding: 10px; border-radius: 8px; font-weight: bold; color: var(--secondary); margin: 15px 0 10px; border-left: 5px solid var(--secondary); font-size: 0.85em; text-transform: uppercase; }
         
-        .row { display: grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 35px; gap: 5px; margin-bottom: 8px; align-items: center; }
-        .header-row { font-size: 0.7em; font-weight: bold; color: #7f8c8d; text-align: center; }
+        .row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 30px; gap: 6px; margin-bottom: 8px; align-items: center; }
+        .header-row { font-size: 0.65em; font-weight: bold; color: #7f8c8d; text-align: center; text-transform: uppercase; }
         
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 0.9em; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 0.85em; }
         .input-group { margin-bottom: 10px; }
         .input-group label { display: block; font-size: 0.8em; color: #7f8c8d; margin-bottom: 5px; margin-left: 5px; }
 
         .btn-add { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; transition: 0.3s; }
         .btn-calc { background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 1.1em; box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3); }
-        .btn-remove { background: var(--danger); color: white; border: none; border-radius: 5px; width: 30px; height: 30px; cursor: pointer; font-weight: bold; }
+        
+        .btn-remove { background: var(--danger); color: white; border: none; border-radius: 5px; width: 24px; height: 24px; cursor: pointer; font-weight: bold; font-size: 0.8em; display: flex; align-items: center; justify-content: center; padding: 0; }
         
         .result { margin-top: 25px; padding: 20px; background: #2c3e50; color: white; border-radius: 12px; text-align: center; display: none; }
         .result h3 { margin: 5px 0 0; color: var(--primary); font-size: 1.8em; }
@@ -52,17 +53,17 @@
     <div class="row header-row">
         <span>¿Qué es?</span>
         <span>Precio $</span>
-        <span>Peso Tot</span>
-        <span>Uso</span>
+        <span>Peso Tot(g)</span>
+        <span>Uso (g)</span>
         <span></span>
     </div>
     
     <div id="ingredients-cont">
         <div class="row ingredient-row">
             <input type="text" placeholder="Mantequilla" class="name">
-            <input type="number" class="price">
-            <input type="number" class="total-weight">
-            <input type="number" class="use">
+            <input type="number" placeholder="12000" class="price">
+            <input type="number" placeholder="500" class="total-weight">
+            <input type="number" placeholder="80" class="use">
             <button class="btn-remove" onclick="removeRow(this)">×</button>
         </div>
     </div>
@@ -106,9 +107,9 @@
         newRow.className = 'row ingredient-row';
         newRow.innerHTML = `
             <input type="text" placeholder="Ingrediente" class="name">
-            <input type="number" class="price">
-            <input type="number" class="total-weight">
-            <input type="number" class="use">
+            <input type="number" placeholder="0" class="price">
+            <input type="number" placeholder="0" class="total-weight">
+            <input type="number" placeholder="0" class="use">
             <button class="btn-remove" onclick="removeRow(this)">×</button>
         `;
         cont.appendChild(newRow);
